@@ -18,7 +18,7 @@ int main(){
     inicializacardapio(cardapio);
     imprimecardapio(cardapio);
     int dia = 1;
-    printf("\n\n\nGerando pedidos aleatórios com base no dia:\n");
+    printf("\n\n\nGerando pedidos aleatorios com base no dia:\n");
     for(int i=0; i<5; i++){
         printf("\n%d dia\n", dia);
         pedidos(cardapio, dia);
