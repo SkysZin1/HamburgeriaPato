@@ -8,6 +8,12 @@
 #define valorBase 1.5
 #define tamanho 10
 
+typedef struct{ // Criação da struct tp_ingrediente
+    char nome[25]; 
+    float valor;
+    int quantidade;
+}tp_ingrediente;
+
 typedef struct {  // Criação da struct tp_hamburger
     char nome[20];
     int id;
@@ -30,8 +36,8 @@ void imprimecardapio(tp_hamburger *p){  // Imprime o nome, preço e a pilha de i
 }
 
 void inicializacardapio(tp_hamburger *cardapio){  // Set de todos os dados de todos os hamburgeres
-    
-    strcpy(cardapio[0].nome, "Bit and Bacon");
+                                                  // <criar função para verificar igualdade da pilha> 
+    strcpy(cardapio[0].nome, "Bit and Bacon");  
     cardapio[0].id = 150;
     cardapio[0].valor = valorBase*35;
     inicializapilha(&cardapio[0].ingrediente);
@@ -104,9 +110,10 @@ void inicializacardapio(tp_hamburger *cardapio){  // Set de todos os dados de to
     push(&cardapio[6].ingrediente, "Pao");
     push(&cardapio[6].ingrediente, "Carne");
     push(&cardapio[6].ingrediente, "Cheddar");
+    push(&cardapio[6].ingrediente, "Cebola Crispy");
     push(&cardapio[6].ingrediente, "Carne");
     push(&cardapio[6].ingrediente, "Cheddar");
-    push(&cardapio[6].ingrediente, "Cebola crispy");
+    push(&cardapio[6].ingrediente, "Cebola Crispy");
     push(&cardapio[6].ingrediente, "Pao");
 
     strcpy(cardapio[7].nome, "Bacon 2.0");
@@ -146,6 +153,61 @@ void inicializacardapio(tp_hamburger *cardapio){  // Set de todos os dados de to
     push(&cardapio[9].ingrediente, "Pao");
 }
 
+void inicializaestoque(tp_ingrediente *estoque){ // Set de todos os dados de todos os ingredientes
+    
+    strcpy(estoque[0].nome, "Pao");
+    estoque[0].valor = valorBase*4;
+    estoque[0].quantidade = 5;
+
+    strcpy(estoque[1].nome, "Queijo");
+    estoque[1].valor = valorBase*5;
+    estoque[1].quantidade = 5;
+
+    strcpy(estoque[2].nome, "Alface");
+    estoque[2].valor = valorBase*3;
+    estoque[2].quantidade = 5;
+
+    strcpy(estoque[3].nome, "Tomate");
+    estoque[3].valor = valorBase*3;
+    estoque[3].quantidade = 5;
+
+    strcpy(estoque[4].nome, "Carne");
+    estoque[4].valor = valorBase*10;
+    estoque[4].quantidade = 5;
+
+    strcpy(estoque[5].nome, "Bacon");
+    estoque[5].valor = valorBase*7;
+    estoque[5].quantidade = 5;
+
+    strcpy(estoque[6].nome, "Carne de Falafel");
+    estoque[6].valor = valorBase*14;
+    estoque[6].quantidade = 5;
+
+    strcpy(estoque[7].nome, "Frango Empanado");
+    estoque[7].valor = valorBase*9;
+    estoque[7].quantidade = 5;
+
+    strcpy(estoque[8].nome, "Maionese Temperada");
+    estoque[8].valor = valorBase*5;
+    estoque[8].quantidade = 5;
+
+    strcpy(estoque[9].nome, "BBQ");
+    estoque[9].valor = valorBase*4;
+    estoque[9].quantidade = 5;
+
+    strcpy(estoque[10].nome, "Cebola Crispy");
+    estoque[10].valor = valorBase*6;
+    estoque[10].quantidade = 5;
+
+    strcpy(estoque[11].nome, "Ovo");
+    estoque[11].valor = valorBase*7;
+    estoque[11].quantidade = 5;
+
+    strcpy(estoque[12].nome, "Cheddar");
+    estoque[12].valor = valorBase*6;
+    estoque[12].quantidade = 5;
+
+}
 
 
 #endif
