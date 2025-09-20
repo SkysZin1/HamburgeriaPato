@@ -5,9 +5,6 @@
 #include <time.h>
 #include "pilha.h"
 #include "cardapio.h"
-#include "fila.h"
-#include "pedidos.h"
-#include "pedidos.c"
 
 
 int main(){
