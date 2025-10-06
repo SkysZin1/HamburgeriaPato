@@ -5,6 +5,7 @@
 #include <time.h>
 #include "pilha.h"
 #include "cardapio.h"
+#include "montagem.h"
 
 
 int main(){
@@ -17,7 +18,7 @@ int main(){
     tp_ingrediente estoque[13];
     inicializaestoque(estoque);
     imprimecardapio(cardapio);
-    // sleep(2); exemplo de uso da função sleep
+    sleep(2); // exemplo de uso da função sleep
     int dia = 1;
     printf("\n\n\nGerando pedidos aleatórios com base no dia:\n");
     for(int i=0; i<5; i++){
@@ -25,5 +26,5 @@ int main(){
         pedidos(cardapio, dia);
         dia++;
     }
-    return 0;
+return 0;
 }

@@ -2,6 +2,7 @@
 #define PILHA_H
 #include <stdio.h>
 #include <locale.h>
+#include <string.h>
 #define MAX 100
 
 typedef char
