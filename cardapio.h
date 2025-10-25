@@ -5,6 +5,7 @@
 #include <locale.h>
 #include <time.h>
 #include "pilha.h"
+#include "fila.h"
 #define valorBase 1.5
 #define tamanho 10
 
@@ -35,10 +36,11 @@ float compara_hamburger(tp_pilha *digitado, tp_hamburger *cardapio, int id){
     return contador/divisor;
 }
 
-void pedidos(tp_hamburger *cardapio, int dia){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
+void gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
     for(int i=0; i<dia; i++){
         int valor = (rand() % 10);
         printf("%s\n", cardapio[valor].nome);
+        insereFila(pedidos, cardapio[valor].id);
     }
 }
 
