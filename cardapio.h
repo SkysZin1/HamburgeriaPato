@@ -6,6 +6,7 @@
 #include <time.h>
 #include "pilha.h"
 #include "fila.h"
+#include "montagem.h"
 #define valorBase 1.5
 #define tamanho 10
 
@@ -21,6 +22,17 @@ typedef struct {  // Criação da struct tp_hamburger
     float valor;
     tp_pilha ingrediente;
 }tp_hamburger;
+
+int explicacao(){
+    int r;
+    system("cls");
+    printf("Bem vindo a hamburgueria Pato Burger, hoje voce sera um de nossos montadores\n");
+    printf("Voce tem um estoque limitado de ingredientes e a cada entrega ganha moedas para comprar mais\n");
+    printf("Se seus ingredientes acabarem voce perde\n");
+    printf("\nO que voce deseja fazer?\n1- Carregar um jogo salvo\n2- Iniciar um novo jogo\n");
+    scanf("%d", &r);
+    return r;
+}
 
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
     tp_pilha esperado = cardapio[id].ingrediente;
@@ -44,27 +56,16 @@ void gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera 
     }
 }
 
-int interface(){
-    int opcao;
+int interface(tp_pilha montado){
+    int opcao = 30;
     printf("\n\n------------------------------ escolha uma opcao ------------------------------ \n\n");
-    printf("0 - Pao\t\t 1 - Queijo\t 2 - Alface\t 3 - Tomate\t 4 - Carne\n5 - Bacon\t 6 - Carne de Falafel\t 7 - Frango Empanado\t 8 - Maionese Temperada\n9 - BBQ\t\t 10 - Cebola Crispy\t 11 - Ovo\t\t 12 - Cheddar\n\n13 - Abrir cardapio padrao\t 14 - Finalizar pedido\n");
-    scanf("%d", &opcao);
+    printf("0 - Pao\t\t 1 - Queijo\t 2 - Alface\t 3 - Tomate\t 4 - Carne\n5 - Bacon\t 6 - Carne de Falafel\t 7 - Frango Empanado\t 8 - Maionese Temperada\n9 - BBQ\t\t 10 - Cebola Crispy\t 11 - Ovo\t\t 12 - Cheddar\n\n13 - Abrir cardapio\t 14 - Abrir estoque\t  15 - Finalizar pedido\n");
+    printf("\n------------------------------ Seu pedido atual ------------------------------\n");
+    print_montagem(montado);
+    while(opcao < 0 || opcao > 15){ 
+        scanf("%d", &opcao);
+    }    
     return opcao;
-}
-    
-int adicionarIngrediente(int opcao, tp_pilha *montado, tp_ingrediente *estoque){
-    if(opcao >=0 && opcao <=12){
-        push(montado, estoque[opcao].nome);
-        estoque[opcao].quantidade--;
-        system("cls");
-        printf("\nIngrediente %s adicionado ao pedido!\n", estoque[opcao].nome);    
-    }
-    else if (opcao == 14) printf("\nPedido finalizado!\n");
-    else{
-        system("cls");
-        printf("\nOpcao invalida! Tente novamente.\n");
-    }
-    return 0;
 }
 
 void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
@@ -74,13 +75,13 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
         printf("\n%s R$%.2f\n", cardapio[i].nome, cardapio[i].valor);
         imprimepilha(cardapio[i].ingrediente);
         }
-        printf("\nDigite 0 para sair\n");
+        printf("\nDigite 0 para sair do cardapio\n");
         scanf("%d", &opcao);
     }
+    system("cls");
 }
 
 void inicializacardapio(tp_hamburger *cardapio){  // Set de todos os dados de todos os hamburgeres
-                                                  // <criar função para verificar igualdade da pilha> 
     strcpy(cardapio[0].nome, "Bit and Bacon");  
     cardapio[0].id = 0;
     cardapio[0].valor = valorBase*35;
@@ -196,62 +197,5 @@ void inicializacardapio(tp_hamburger *cardapio){  // Set de todos os dados de to
     push(&cardapio[9].ingrediente, "Bacon");
     push(&cardapio[9].ingrediente, "Pao");
 }
-
-void inicializaestoque(tp_ingrediente *estoque){ // Set de todos os dados de todos os ingredientes
-    
-    strcpy(estoque[0].nome, "Pao");
-    estoque[0].valor = valorBase*4;
-    estoque[0].quantidade = 5;
-
-    strcpy(estoque[1].nome, "Queijo");
-    estoque[1].valor = valorBase*5;
-    estoque[1].quantidade = 5;
-
-    strcpy(estoque[2].nome, "Alface");
-    estoque[2].valor = valorBase*3;
-    estoque[2].quantidade = 5;
-
-    strcpy(estoque[3].nome, "Tomate");
-    estoque[3].valor = valorBase*3;
-    estoque[3].quantidade = 5;
-
-    strcpy(estoque[4].nome, "Carne");
-    estoque[4].valor = valorBase*10;
-    estoque[4].quantidade = 5;
-
-    strcpy(estoque[5].nome, "Bacon");
-    estoque[5].valor = valorBase*7;
-    estoque[5].quantidade = 5;
-
-    strcpy(estoque[6].nome, "Carne de Falafel");
-    estoque[6].valor = valorBase*14;
-    estoque[6].quantidade = 5;
-
-    strcpy(estoque[7].nome, "Frango Empanado");
-    estoque[7].valor = valorBase*9;
-    estoque[7].quantidade = 5;
-
-    strcpy(estoque[8].nome, "Maionese Temperada");
-    estoque[8].valor = valorBase*5;
-    estoque[8].quantidade = 5;
-
-    strcpy(estoque[9].nome, "BBQ");
-    estoque[9].valor = valorBase*4;
-    estoque[9].quantidade = 5;
-
-    strcpy(estoque[10].nome, "Cebola Crispy");
-    estoque[10].valor = valorBase*6;
-    estoque[10].quantidade = 5;
-
-    strcpy(estoque[11].nome, "Ovo");
-    estoque[11].valor = valorBase*7;
-    estoque[11].quantidade = 5;
-
-    strcpy(estoque[12].nome, "Cheddar");
-    estoque[12].valor = valorBase*6;
-    estoque[12].quantidade = 5;
-
-}
-
 
 #endif
