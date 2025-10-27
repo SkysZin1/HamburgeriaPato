@@ -6,6 +6,7 @@
 #include <time.h>
 #include "pilha.h"
 #include "fila.h"
+#include "montagem.h"
 #define valorBase 1.5
 #define tamanho 10
 
@@ -22,6 +23,16 @@ typedef struct {  // Criação da struct tp_hamburger
     tp_pilha ingrediente;
 }tp_hamburger;
 
+int explicacao(){
+    int r;
+    system("cls");
+    printf("Bem vindo a hamburgueria Pato Burger, hoje voce sera um de nossos montadores\n");
+    printf("Voce tem um estoque limitado de ingredientes e a cada entrega ganha moedas para comprar mais\n");
+    printf("Se seus ingredientes acabarem voce perde\n");
+    printf("\nO que voce deseja fazer?\n1- Carregar um jogo salvo\n2- Iniciar um novo jogo\n");
+    scanf("%d", &r);
+    return r;
+}
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
     tp_pilha esperado = cardapio[id].ingrediente;
     float contador = 0;
@@ -44,20 +55,27 @@ void gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera 
     }
 }
 
-int interface(){
+int interface(tp_pilha montado){
     int opcao;
     printf("\n\n------------------------------ escolha uma opcao ------------------------------ \n\n");
     printf("0 - Pao\t\t 1 - Queijo\t 2 - Alface\t 3 - Tomate\t 4 - Carne\n5 - Bacon\t 6 - Carne de Falafel\t 7 - Frango Empanado\t 8 - Maionese Temperada\n9 - BBQ\t\t 10 - Cebola Crispy\t 11 - Ovo\t\t 12 - Cheddar\n\n13 - Abrir cardapio padrao\t 14 - Finalizar pedido\n");
+    printf("\n------------------------------ seu hamburger ------------------------------ \n");
+    print_montagem(montado);
     scanf("%d", &opcao);
     return opcao;
 }
     
 int adicionarIngrediente(int opcao, tp_pilha *montado, tp_ingrediente *estoque){
     if(opcao >=0 && opcao <=12){
-        push(montado, estoque[opcao].nome);
-        estoque[opcao].quantidade--;
-        system("cls");
-        printf("\nIngrediente %s adicionado ao pedido!\n", estoque[opcao].nome);    
+        if (estoque[opcao].quantidade != 0){   
+            push(montado, estoque[opcao].nome);
+            estoque[opcao].quantidade--;
+            system("cls");
+            printf("\nIngrediente %s adicionado ao pedido!\n", estoque[opcao].nome);
+        }
+        else {
+            printf("\nVoce não possui %s em estoque\n", estoque[opcao].nome);
+        }        
     }
     else if (opcao == 14) printf("\nPedido finalizado!\n");
     else{
@@ -70,6 +88,7 @@ int adicionarIngrediente(int opcao, tp_pilha *montado, tp_ingrediente *estoque){
 void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
     int opcao = 1;
     while(opcao != 0){
+        system("cls");
         for(int i=0; i<tamanho; i++){
         printf("\n%s R$%.2f\n", cardapio[i].nome, cardapio[i].valor);
         imprimepilha(cardapio[i].ingrediente);

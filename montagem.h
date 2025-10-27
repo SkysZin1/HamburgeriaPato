@@ -15,13 +15,13 @@
 #define WHITE   "\x1b[37m"
 #define BRIGHT_WHITE "\x1b[97m"
 
-int print_montagem(tp_pilha *pilha) {
+int print_montagem(tp_pilha pilha) {
     const char* reset = "\x1b[0m";
     
     tp_item e[30];
 
-    while (!pilhavazia(pilha)) {
-        pop(pilha, e);
+    while (!pilhavazia(&pilha)) {
+        pop(&pilha, e);
 
         /* PÃO */
         if (strcmp(e, "Pao") == 0) {
@@ -125,7 +125,7 @@ int print_montagem(tp_pilha *pilha) {
         else if (strcmp(e, "Ovo") == 0) {
             printf("\x1b[37m");
             printf("   ( O )     \n");
-            printf("     OVO     \n");
+            printf("    OVO      \n");
             printf("   ( O )     \n");
             printf("%s", reset);
         }
@@ -142,7 +142,7 @@ int print_montagem(tp_pilha *pilha) {
 
     }
 
-    return 0;
+    return 1;
 }
 
 #endif

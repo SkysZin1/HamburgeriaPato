@@ -3,7 +3,7 @@
 #include "montagem.h"
 #include <stdio.h>
 
-int main(void) {
+int main(){
     system("chcp 65001");
     system("cls");
     tp_pilha pilha;
@@ -28,7 +28,7 @@ int main(void) {
     strcpy(ing.nome, "Pao");
     push(&pilha, ing.nome);
 
-    print_montagem(&pilha);
+    print_montagem(pilha);
     float valor_recebido = compara_hamburger(&pilha, cardapio, 0);
     printf("%.2f", valor_recebido);
 

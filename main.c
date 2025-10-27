@@ -21,9 +21,7 @@ int main(){
     inicializaFila(&pedidos);
     int r;
     while(r!=1 && r!=2){
-        printf("Bem vindo a hamburgueria Pato Burger, hoje voce sera um de nossos montadores\n");
-        printf("O que voce deseja fazer?\n1- Carregar um jogo salvo\n2- Iniciar um novo jogo\n");
-        scanf("%d", &r);
+        r = explicacao();
     }
     if (r == 1){
 
@@ -41,14 +39,14 @@ int main(){
             sleep(2);
             gerar_pedidos(cardapio, dia, &pedidos);
             sleep(dia*2);
-            system("cls");
             while(!filaVazia(&pedidos)){
                 tp_itemf id;
                 removeFila(&pedidos, &id);
                 esperado = cardapio[id].ingrediente;
                 int opcao = 15;
                 while (opcao != 14){
-                    opcao = interface();
+                    system("cls");
+                    opcao = interface(montado);
                     if(opcao == 13){
                         abrirCardapio(&cardapio);
                     }else{
@@ -59,8 +57,9 @@ int main(){
                 system("cls");
                 printf("Voce acertou %.2f%% do pedido! Com isso voce ganha %.2f moedas com essa entrega!\n", valor_recebido*100, valor_recebido*cardapio[id].valor);
                 sleep(3);
-                
             }
+            printf("Seu %d dia acabou, agora voce tera acesso a loja de ingredientes para se reabastecer\n", dia);
+            sleep(3);
         }
     }    
 return 0;
