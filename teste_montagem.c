@@ -28,9 +28,7 @@ int main(void) {
     strcpy(ing.nome, "Pao");
     push(&pilha, ing.nome);
 
-    /* Agora chama a função que imprime
     print_montagem(&pilha);
-    */
     float valor_recebido = compara_hamburger(&pilha, cardapio, 0);
     printf("%.2f", valor_recebido);
 

@@ -71,4 +71,12 @@ int pilhaigual(tp_pilha a, tp_pilha b){
 	return 1;
 }
 
+int apagarPilha(tp_pilha *p){
+	while(!pilhavazia(p)){
+		tp_item e[20];
+		pop(p, e);
+	}
+	return 1;
+}
+
 #endif

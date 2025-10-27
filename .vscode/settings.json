@@ -3,6 +3,7 @@
         "locale.h": "c",
         "stdlib.h": "c",
         "time.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "pilha.h": "c"
     }
 }

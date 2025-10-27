@@ -22,7 +22,7 @@ typedef struct {  // Criação da struct tp_hamburger
     tp_pilha ingrediente;
 }tp_hamburger;
 
-float compara_hamburger(tp_pilha *digitado, tp_hamburger *cardapio, int id){
+float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
     tp_pilha esperado = cardapio[id].ingrediente;
     float contador = 0;
     int divisor;
@@ -30,7 +30,7 @@ float compara_hamburger(tp_pilha *digitado, tp_hamburger *cardapio, int id){
     tp_item a[30], b[30];
     for(int i=0; i<divisor; i++){
         pop(&esperado, a);
-        pop(digitado, b);
+        pop(montado, b);
         if(strcmp(a, b)==0) contador++;
     }
     return contador/divisor;
@@ -44,10 +44,38 @@ void gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera 
     }
 }
 
-void imprimecardapio(tp_hamburger *p){  // Imprime o nome, preço e a pilha de ingredientes de cada hamburger
-    for(int i=0; i<tamanho; i++){
-        printf("\n%s R$%.2f\n", p[i].nome, p[i].valor);
-        imprimepilha(p[i].ingrediente);
+int interface(){
+    int opcao;
+    printf("\n\n------------------------------ escolha uma opcao ------------------------------ \n\n");
+    printf("0 - Pao\t\t 1 - Queijo\t 2 - Alface\t 3 - Tomate\t 4 - Carne\n5 - Bacon\t 6 - Carne de Falafel\t 7 - Frango Empanado\t 8 - Maionese Temperada\n9 - BBQ\t\t 10 - Cebola Crispy\t 11 - Ovo\t\t 12 - Cheddar\n\n13 - Abrir cardapio padrao\t 14 - Finalizar pedido\n");
+    scanf("%d", &opcao);
+    return opcao;
+}
+    
+int adicionarIngrediente(int opcao, tp_pilha *montado, tp_ingrediente *estoque){
+    if(opcao >=0 && opcao <=12){
+        push(montado, estoque[opcao].nome);
+        estoque[opcao].quantidade--;
+        system("cls");
+        printf("\nIngrediente %s adicionado ao pedido!\n", estoque[opcao].nome);    
+    }
+    else if (opcao == 14) printf("\nPedido finalizado!\n");
+    else{
+        system("cls");
+        printf("\nOpcao invalida! Tente novamente.\n");
+    }
+    return 0;
+}
+
+void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
+    int opcao = 1;
+    while(opcao != 0){
+        for(int i=0; i<tamanho; i++){
+        printf("\n%s R$%.2f\n", cardapio[i].nome, cardapio[i].valor);
+        imprimepilha(cardapio[i].ingrediente);
+        }
+        printf("\nDigite 0 para sair\n");
+        scanf("%d", &opcao);
     }
 }
 

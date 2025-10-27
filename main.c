@@ -29,36 +29,39 @@ int main(){
 
     }
     else if(r==2){
+        tp_pilha esperado, montado;
+        inicializapilha(&esperado);
+        inicializapilha(&montado);
         for(int dia = 1; dia<10; dia++){
-            tp_hamburger esperado, montado;
-            inicializapilha(&esperado.ingrediente);
-            inicializapilha(&montado.ingrediente);
+            apagarPilha(&montado);
+            apagarPilha(&esperado);
+            system("cls");
             printf("Dia %d\n", dia);
             printf("Prepare-se, os pedidos aparecerão apenas uma vez e voce precisara decora-los\n");
             sleep(2);
             gerar_pedidos(cardapio, dia, &pedidos);
-            sleep(10);
+            sleep(dia*2);
             system("cls");
             while(!filaVazia(&pedidos)){
-                tp_itemf e;
-                removeFila(&pedidos, &e);
-                esperado.ingrediente = cardapio[e].ingrediente;
+                tp_itemf id;
+                removeFila(&pedidos, &id);
+                esperado = cardapio[id].ingrediente;
+                int opcao = 15;
+                while (opcao != 14){
+                    opcao = interface();
+                    if(opcao == 13){
+                        abrirCardapio(&cardapio);
+                    }else{
+                        adicionarIngrediente(opcao, &montado, &estoque);
+                    }
+                }
+                float valor_recebido = compara_hamburger(&montado, cardapio, id);
+                system("cls");
+                printf("Voce acertou %.2f%% do pedido! Com isso voce ganha %.2f moedas com essa entrega!\n", valor_recebido*100, valor_recebido*cardapio[id].valor);
+                sleep(3);
+                
             }
         }
     }    
-
-
-
-    /*
-    imprimecardapio(cardapio);
-    sleep(2); // exemplo de uso da função sleep
-    int dia = 1;
-    printf("\n\n\nGerando pedidos aleatórios com base no dia:\n");
-    for(int i=0; i<5; i++){
-        printf("\n%d dia\n", dia);
-        gerar_pedidos(cardapio, dia);
-        dia++;
-    }
-        */
 return 0;
 }
