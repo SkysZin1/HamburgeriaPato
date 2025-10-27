@@ -142,7 +142,7 @@ int print_montagem(tp_pilha pilha) {
 
     }
 
-    return 0;
+    return 1;
 }
 
 #endif
