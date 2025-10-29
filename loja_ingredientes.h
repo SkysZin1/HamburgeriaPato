@@ -62,18 +62,22 @@ No* encontra_no_por_nome(tp_estoque_lista* estoque, const char* nome) {
 
 
 
-// Imprime estoque
+// Imprime estoque (interface melhorada, sem ID)
 void imprime_estoque_lista(tp_estoque_lista* estoque) {
-    int opcao  = 1;
-    while(opcao != 0){
-        printf("\n--- Estoque de Ingredientes (Lista Encadeada) ---\n");
+    int opcao = 1;
+    while (opcao != 0) {
+        system("cls");
+        printf("\n+-------------------- Estoque de Ingredientes --------------------+\n");
+        printf("| %-30s | %8s |\n", "INGREDIENTE", "QUANT.");
+        printf("---------------------------------------------------------------\n");
+
         No* atual = estoque->inicio;
         while (atual != NULL) {
-            printf("%s: %d unidades\n", atual->ingrediente.nome, atual->ingrediente.quantidade);
+            printf("| %-30s | %8d |\n", atual->ingrediente.nome, atual->ingrediente.quantidade);
             atual = atual->proximo;
         }
-        printf("--------------------------------------------------\n");
-        printf("Digite 0 para sair do estoque\n");
+        printf("---------------------------------------------------------------\n");
+        printf("Digite 0 para sair\n");
         scanf("%d", &opcao);
     }
     system("cls");
@@ -111,7 +115,6 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
                 "Cebola Crispy","Ovo","Cheddar"
             };
             int id_ingrediente = -1;
-            id_ingrediente = -1;
             while (id_ingrediente < 0 || id_ingrediente >= 13) {
                 system("cls");
                 printf("\n------------------------------ ESCOLHA O INGREDIENTE ------------------------------\n\n");

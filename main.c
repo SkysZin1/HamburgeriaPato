@@ -35,11 +35,19 @@ int main(){
         float moedas = 100.0;
         for(int dia = 1; dia<10; dia++){
             system("cls");
-            printf("Dia %d\n", dia);
-            printf("Prepare-se, os pedidos aparecerão apenas uma vez e voce precisara decora-los\n");
-            Sleep(2 * 1000);
+            printf("+------------------------------------- DIA %d ----------------------------------+\n", dia);
+            printf("| %-66s |\n", "Prepare-se, os pedidos aparecerão apenas uma vez e voce precisará decorá-los");
+            printf("| %-78s |\n", "Você começa o dia com:");
+            printf("| Moedas: R$ %-65.2f |\n", moedas);
+            printf("-------------------------------------------------------------------------------\n");
+            printf("Pressione ENTER para continuar...");
+            getchar();
+            getchar();
+            printf("\nBoa sorte!\n");
+            Sleep(1000);
+            system("cls");
             gerar_pedidos(cardapio, dia, &pedidos);
-            Sleep(dia * 2 * 1000);
+            Sleep(dia * 3 * 1000);
             system("cls");
             while(!filaVazia(&pedidos)){
                 tp_itemf id;
@@ -62,15 +70,19 @@ int main(){
                 system("cls");
                 float ganho = valor_recebido * cardapio[id].valor;
                 moedas += ganho;
-                printf("Voce acertou %.2f%% do pedido! Com isso voce ganha %.2f moedas com essa entrega!\n", valor_recebido*100, ganho);
-                printf("Total de moedas: %.2f\n", moedas);
+                printf("+------------------------------ ENTREGA ------------------------------+\n");
+                printf("| Você acertou %6.2f%% do pedido! Ganhou R$ %8.2f nesta entrega.         |\n", valor_recebido*100, ganho);
+                printf("| Total de moedas: R$ %-44.2f |\n", moedas);
+                printf("-----------------------------------------------------------------------\n");
                 Sleep(3 * 1000);
                 apagarPilha(&montado);
                 apagarPilha(&esperado);
             }
             moedas -= dia * 15 * valorBase;
-            printf("Seu %d dia acabou, voce teve um custo de operacao de %d\n", dia, dia * 15 * valorBase);
-            printf("Agora voce sera redirecionado para a loja de ingredientes\n");
+            printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);
+            printf("| Custo de operação: R$ %-44.2f |\n", dia * 15 * valorBase);
+            printf("| Agora você será redirecionado para a loja de ingredientes.           |\n");
+            printf("------------------------------------------------------------------------\n");
             Sleep(3 * 1000);
             interface_loja(&estoque, &moedas);
         }
