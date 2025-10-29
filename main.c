@@ -9,6 +9,7 @@
 #include "cardapio.h"
 #include "montagem.h"
 #include "loja_ingredientes.h"
+#include "interface.h"
 
 int main(){
     system("chcp 65001");
