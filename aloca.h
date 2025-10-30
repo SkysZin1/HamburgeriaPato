@@ -1,6 +1,6 @@
 #ifndef ALOCA_H
 #define ALOCA_H
-
+#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +36,23 @@ int gravaRelatorioDia(int dia, int totalHamburgueres, float totalMoedas) {
         fclose(arq);
         return 1;
     }
+}
+
+int imprimeRelatorio() {
+    FILE *arq = fopen("../alocacao.txt", "r");
+
+    if (arq == NULL) {
+        perror("Erro ao abrir alocacao.txt (imprimir relatorio)");
+        return 0;
+    }
+
+    char linha[200];
+    while (fgets(linha, sizeof(linha), arq) != NULL) {
+        printf("%s", linha);
+    }
+    Sleep(5000);
+    fclose(arq);
+    return 1;
 }
 
 #endif
