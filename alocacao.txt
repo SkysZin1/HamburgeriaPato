@@ -1,0 +1,18 @@
+
+======= RELATÓRIO DO DIA 1 =======
+Total de hambúrgueres vendidos: 1
+Total de moedas obtidas: R$ 0.00
+=====================================
+
+
+======= RELATÓRIO DO DIA 2 =======
+Total de hambúrgueres vendidos: 1
+Total de moedas obtidas: R$ 0.00
+=====================================
+
+
+======= RELATÓRIO DO DIA 3 =======
+Total de hambúrgueres vendidos: 4
+Total de moedas obtidas: R$ 33.75
+=====================================
+

@@ -7,7 +7,7 @@
 #include "pilha.h"
 #include "cardapio.h"
 
-int apagaRelatorio() {
+int apagaRelatorio() { // Apaga o relatorio anterior, se existir
     FILE *arq = fopen("../alocacao.txt", "w");
 
     if (arq == NULL) {
@@ -18,7 +18,7 @@ int apagaRelatorio() {
     return 1;    
 }
 
-int gravaRelatorioDia(int dia, int totalHamburgueres, float totalMoedas) {
+int gravaRelatorioDia(int dia, int totalHamburgueres, float totalMoedas) { // Grava o relatorio do dia atual no arquivo
     FILE *arq = fopen("../alocacao.txt", "a");
 
     if (arq == NULL) {
@@ -38,7 +38,7 @@ int gravaRelatorioDia(int dia, int totalHamburgueres, float totalMoedas) {
     }
 }
 
-int imprimeRelatorio() {
+int imprimeRelatorio() { // Imprime o relatorio final na tela
     FILE *arq = fopen("../alocacao.txt", "r");
 
     if (arq == NULL) {

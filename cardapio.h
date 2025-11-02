@@ -77,7 +77,7 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
     system("cls");
 }
 
-float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
+float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // Compara o hamburger montado com o pedido esperado
     tp_pilha esperado = cardapio[id].ingrediente;
     float contador = 0;
     int divisor;
@@ -91,12 +91,14 @@ float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
     return contador/divisor;
 }
 
-void gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
-    for(int i=0; i<dia; i++){
+int gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
+    int num_pedidos = (rand() % (dia+1)) + dia - 1;
+    for(int i=0; i<num_pedidos; i++){
         int valor = (rand() % 10);
         printf("%d - %s\n", i + 1, cardapio[valor].nome);
         insereFila(pedidos, cardapio[valor].id);
     }
+    return num_pedidos;
 }
 
 

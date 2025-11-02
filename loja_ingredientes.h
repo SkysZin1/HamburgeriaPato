@@ -62,7 +62,7 @@ No* encontra_no_por_nome(tp_estoque_lista* estoque, const char* nome) {
 
 
 
-// Imprime estoque (interface melhorada, sem ID)
+// Imprime estoque
 void imprime_estoque_lista(tp_estoque_lista* estoque) {
     int opcao = 1;
     while (opcao != 0) {
@@ -94,7 +94,7 @@ void imprime_estoque_lista(tp_estoque_lista* estoque) {
     estoque->inicio = NULL;
 }
 
-// Interface unificada da loja de ingredientes
+// Interface da loja de ingredientes
 void interface_loja(tp_estoque_lista* estoque, float* moedas) {
     int opcao = -1;
     while (opcao != 0) {
@@ -197,7 +197,7 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
     }
 }
 
-// Adiciona ingrediente ao pedido a partir de um índice (mesma ordem interface)
+// Adiciona ingrediente ao pedido
 int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_lista *estoque) {
     const char* nomes[13] = {
         "Pao","Queijo","Alface","Tomate","Carne","Bacon",

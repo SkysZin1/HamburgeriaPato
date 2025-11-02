@@ -26,8 +26,14 @@ int main(){
     inicializapilha(&esperado);
     inicializapilha(&montado);
     float moedas = 100.0, ganho, recebido_total = 0.0;
+    int num_pedidos;
     explicacao();
     for(int dia = 1; dia<10; dia++){
+        if (moedas <= 0){
+            printf("Você ficou sem moedas! Fim de jogo.\n");
+            imprimeRelatorio();
+            break;
+        }
         system("cls");
         printf("+------------------------------------- DIA %d ----------------------------------+\n", dia);
         printf("| %-66s |\n", "Prepare-se, os pedidos aparecerão apenas uma vez e voce precisará decorá-los");
@@ -40,8 +46,8 @@ int main(){
         printf("\nBoa sorte!\n");
         Sleep(1000);
         system("cls");
-        gerar_pedidos(cardapio, dia, &pedidos);
-        Sleep(dia * 3 * 1000);
+        num_pedidos = gerar_pedidos(cardapio, dia, &pedidos);
+        Sleep(num_pedidos * 3 * 1000);
         system("cls");
         while(!filaVazia(&pedidos)){
             tp_itemf id;
@@ -73,11 +79,11 @@ int main(){
             apagarPilha(&montado);
             apagarPilha(&esperado);
         }
-        gravaRelatorioDia(dia, dia, ganho);
+        gravaRelatorioDia(dia, num_pedidos, ganho);
         moedas -= dia * 15 * valorBase;
         imprimeRelatorio(); // Exemplo demonstrativo do relatorio
         printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);
-        printf("| Custo de operação: R$ %-44.2f |\n", dia * 15 * valorBase);
+        printf("| Custo de operação: R$ %-44.2f |\n", num_pedidos * 15 * valorBase);
         printf("| Agora você será redirecionado para a loja de ingredientes.           |\n");
         printf("------------------------------------------------------------------------\n");
         Sleep(3 * 1000);
