@@ -31,7 +31,7 @@ void explicacao(){
     printf("| Hoje você será um de nossos montadores.                                        |\n");
     printf("| Você tem um estoque limitado de ingredientes e a cada entrega ganha moedas.    |\n");
     printf("| O restaurante possui custos de operação a cada dia que passa.                  |\n");
-    printf("| Se seus ingredientes ou moedas acabarem, você perde.                           |\n");
+    printf("| Se suas moedas acabarem, você perde.                                           |\n");
     printf("+-------------------------------------------------------------------------------+\n");
     printf("Pressione ENTER para continuar...");
     getchar();
@@ -78,13 +78,19 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
 }
 
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // Compara o hamburger montado com o pedido esperado
-    tp_pilha esperado = cardapio[id].ingrediente;
+    tp_pilha esperado = cardapio[id].ingrediente, invertido;
     float contador = 0;
     int divisor;
-    divisor = alturaPilha(&esperado);
     tp_item a[30], b[30];
+    divisor = alturaPilha(&esperado);
     for(int i=0; i<divisor; i++){
         pop(&esperado, a);
+        push(&invertido, a);
+    }
+    
+    for(int i=0; i<divisor; i++){
+        if(pilhavazia(&invertido) || pilhavazia(montado)) break;
+        pop(&invertido, a);
         pop(montado, b);
         if(strcmp(a, b)==0) contador++;
     }
