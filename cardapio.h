@@ -35,8 +35,6 @@ void explicacao(){
     printf("+-------------------------------------------------------------------------------+\n");
     printf("Pressione ENTER para continuar...");
     getchar();
-    getchar();
-    printf("+-------------------------------------------------------------------------------+\n");
 }
 
 int interface(tp_pilha montado){
@@ -61,6 +59,7 @@ int interface(tp_pilha montado){
 }
 
 void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
+    system("cls");
     int opcao = 1;
     while(opcao != 0){
         printf("\n+------------------------------ CARDÁPIO ------------------------------+\n");
@@ -79,15 +78,14 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
 
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // Compara o hamburger montado com o pedido esperado
     tp_pilha esperado = cardapio[id].ingrediente, invertido;
+    inicializapilha(&invertido);
     float contador = 0;
-    int divisor;
     tp_item a[30], b[30];
-    divisor = alturaPilha(&esperado);
-    for(int i=0; i<divisor; i++){
+    while(!pilhavazia(&esperado)){
         pop(&esperado, a);
         push(&invertido, a);
     }
-    
+    int divisor = alturaPilha(&invertido);
     for(int i=0; i<divisor; i++){
         if(pilhavazia(&invertido) || pilhavazia(montado)) break;
         pop(&invertido, a);
@@ -98,7 +96,11 @@ float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // C
 }
 
 int gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
-    int num_pedidos = (rand() % (dia+1)) + dia - 1;
+    int num_pedidos = 0;
+    srand(time(NULL));
+    while(num_pedidos == 0){
+    num_pedidos = (rand() % (dia+1)) + dia - 1;
+    }
     for(int i=0; i<num_pedidos; i++){
         int valor = (rand() % 10);
         printf("%d - %s\n", i + 1, cardapio[valor].nome);

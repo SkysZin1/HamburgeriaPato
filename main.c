@@ -22,8 +22,7 @@ int main(){
     inicializa_estoque_lista(&estoque);
     tp_fila pedidos;
     inicializaFila(&pedidos);
-    tp_pilha esperado, montado;
-    inicializapilha(&esperado);
+    tp_pilha montado;
     inicializapilha(&montado);
     float moedas = 100.0, ganho, recebido_total = 0.0;
     int num_pedidos;
@@ -48,7 +47,6 @@ int main(){
         while(!filaVazia(&pedidos)){
             tp_itemf id;
             removeFila(&pedidos, &id);
-            esperado = cardapio[id].ingrediente;
             int opcao = 16;
             while (opcao != 15){
                 opcao = interface(montado);
@@ -73,12 +71,12 @@ int main(){
             printf("-----------------------------------------------------------------------\n");
             Sleep(3 * 1000);
             apagarPilha(&montado);
-            apagarPilha(&esperado);
         }
-        gravaRelatorioDia(dia, num_pedidos, ganho);
-        moedas -= dia * 15 * valorBase;
+        gravaRelatorioDia(dia, num_pedidos, ganho); // erro ao abrir: permissao negada
+        float custo = num_pedidos * 10 * valorBase;
+        moedas -= custo;
         printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);
-        printf("| Custo de operação: R$ %-44.2f |\n", num_pedidos * 15 * valorBase);
+        printf("| Custo de operação: R$ %-44.2f |\n", custo);
         if (moedas <= 0){
             printf("\nVocê ficou sem moedas! Fim de jogo.\n");
             imprimeRelatorio();
