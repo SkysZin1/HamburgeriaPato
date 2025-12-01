@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include "cardapio.h"
 
 typedef struct NO* ArvAVL;
 
 struct NO{
    struct NO *esq;
-   int info;
-   int alt; //altura da sub-�rvore (facilita o c�lculo do fator de balanceamento!)
+   tp_ingrediente info;
+   int alt; //altura da sub-árvore (facilita o cálculo do fator de balanceamento!)
    struct NO *dir;
 };
 
@@ -16,10 +17,10 @@ ArvAVL* criarAVL();
 void preOrd(ArvAVL* raiz);
 void emOrd(ArvAVL* raiz);
 void posOrd(ArvAVL* raiz);
-int inserir(ArvAVL* raiz, int valor);
-int remover(ArvAVL* raiz, int valor); // Respons�vel pela busca do n� a ser removido
-struct NO* buscarMenor(struct NO* atual); // Busca o n� mais a esquerda de uma �rvore
-int consultarValorAVL(ArvAVL* raiz, int valor);
+int inserir(ArvAVL* raiz, tp_ingrediente valor);
+int remover(ArvAVL* raiz, tp_ingrediente valor);
+struct NO* buscarMenor(struct NO* atual);
+int consultarValorAVL(ArvAVL* raiz, tp_ingrediente valor);
 int maior(int x, int y);
 int alt_NO(struct NO* no);
 int fb_NO(struct NO* no);
@@ -51,7 +52,7 @@ void preOrd(ArvAVL* raiz){
    	  if(contPrint!=0){
 	     printf(" ");	 
 	  }
-      printf("%d", (*raiz)->info);
+      printf("%s", (*raiz)->info.nome);
       contPrint++;
       preOrd(&((*raiz)->esq));
       preOrd(&((*raiz)->dir));
@@ -66,7 +67,7 @@ void emOrd(ArvAVL* raiz){
    	  if(contPrint!=0){
 	     printf(" ");	 
 	  }
-      printf("%d", (*raiz)->info);
+      printf("%s", (*raiz)->info.nome);
       contPrint++;
       emOrd(&((*raiz)->dir));
    }
@@ -80,7 +81,7 @@ void posOrd(ArvAVL* raiz){
    	  if(contPrint!=0){
 	     printf(" ");	 
 	  }
-      printf("%d", (*raiz)->info);
+      printf("%s", (*raiz)->info.nome);
       contPrint++;
    }
 }
@@ -108,7 +109,7 @@ int totalNOsABB(ArvAVL* raiz){
 
 
 
-int inserir(ArvAVL* raiz, int valor){	
+int inserir(ArvAVL* raiz, tp_ingrediente valor){	
 	int res;
 	if(*raiz==NULL){
 		struct NO* novo;
@@ -122,10 +123,10 @@ int inserir(ArvAVL* raiz, int valor){
 		return 1;	
 	} else {
 		struct NO* atual = *raiz;
-		if(valor < atual->info){
+		if(strcmp(valor.nome, atual->info.nome) < 0){
 			if((res=inserir(&(atual->esq), valor))==1){
 				if(fb_NO(atual) >= 2){
-					if(valor < (*raiz)->esq->info){
+					if(strcmp(valor.nome, (*raiz)->esq->info.nome) < 0){
 						RotacaoLL(raiz);
 					}else{
 						RotacaoLR(raiz);
@@ -133,10 +134,10 @@ int inserir(ArvAVL* raiz, int valor){
 				}
 			}
 		}else{
-			if(valor > atual->info){
+			if(strcmp(valor.nome, atual->info.nome) > 0){
 				if((res=inserir(&(atual->dir), valor))==1){
 					if(fb_NO(atual) >= 2){
-						if(valor > (*raiz)->dir->info){
+						if(strcmp(valor.nome, (*raiz)->dir->info.nome) > 0){
 							RotacaoRR(raiz);
 						}else{
 							RotacaoRL(raiz);
@@ -166,15 +167,15 @@ void liberaABB(ArvAVL* raiz){
    free(raiz);
 }
 
-int consultarValorAVL(ArvAVL* raiz, int valor){
+int consultarValorAVL(ArvAVL* raiz, tp_ingrediente valor){
 	if(raiz == NULL) return 0;
 	if(*raiz == NULL) return 0;
 	struct NO* atual = *raiz;
 	while(atual != NULL){
-		if(atual->info == valor){
+		if(strcmp(atual->info.nome, valor.nome) == 0){
 			return 1;
 		}else{
-			if(atual->info > valor){
+			if(strcmp(atual->info.nome, valor.nome) > 0){
 				atual = atual->esq;
 			}else{
 				atual = atual->dir;
@@ -229,13 +230,13 @@ void RotacaoRL(ArvAVL* raiz){
 	RotacaoRR(raiz);
 }
 
-int remover(ArvAVL* raiz, int valor){	
+int remover(ArvAVL* raiz, tp_ingrediente valor){	
 	int res;
 	if(*raiz==NULL){ // Valor n�o encontrado!
 		printf("Valor %d nao encontrado na �rvore!", valor);
 		return 0;	
 	} 
-	if(valor < (*raiz)->info){
+	if(strcmp(valor.nome, (*raiz)->info.nome) < 0){
 		if((res=remover(&(*raiz)->esq, valor))==1){
 			if(fb_NO(*raiz) >= 2){
 				if(alt_NO((*raiz)->dir->esq) <= alt_NO((*raiz)->dir->dir)){
@@ -245,7 +246,7 @@ int remover(ArvAVL* raiz, int valor){
 				}
 			}
 		}				
-	}else if(valor > (*raiz)->info){
+	}else if(strcmp(valor.nome, (*raiz)->info.nome) > 0){
 		if((res=remover(&(*raiz)->dir, valor))==1){
 			if(fb_NO(*raiz) >= 2){
 				if(alt_NO((*raiz)->esq->dir) <= alt_NO((*raiz)->esq->esq)){

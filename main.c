@@ -57,7 +57,7 @@ int main(){
                     imprime_estoque_arvore(&estoque);
                 }
                 else{
-                    adicionarIngrediente_arvore(opcao, &montado, &estoque);
+                    adicionarIngrediente_por_indice(opcao, &montado, &estoque);
                 }
             }
             float valor_recebido = compara_hamburger(&montado, cardapio, id);
