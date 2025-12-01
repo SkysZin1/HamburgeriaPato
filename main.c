@@ -18,8 +18,8 @@ int main(){
     apagaRelatorio();
     tp_hamburger cardapio[10];
     inicializacardapio(cardapio);
-    tp_estoque_arvore estoque;
-    inicializa_estoque_arvore(&estoque);
+    tp_estoque_lista estoque;
+    inicializa_estoque_lista(&estoque);
     tp_fila pedidos;
     inicializaFila(&pedidos);
     tp_pilha montado;
@@ -54,10 +54,10 @@ int main(){
                     abrirCardapio(cardapio);
                 }
                 if(opcao == 14){
-                    imprime_estoque_arvore(&estoque);
+                    imprime_estoque_lista(&estoque);
                 }
                 else{
-                    adicionarIngrediente_arvore(opcao, &montado, &estoque);
+                    adicionarIngrediente_lista(opcao, &montado, &estoque);
                 }
             }
             float valor_recebido = compara_hamburger(&montado, cardapio, id);
@@ -72,7 +72,7 @@ int main(){
             Sleep(3 * 1000);
             apagarPilha(&montado);
         }
-        gravaRelatorioDia(dia, num_pedidos, ganho); // erro ao abrir no pc do senai: permissao negada
+        gravaRelatorioDia(dia, num_pedidos, ganho); // erro ao abrir: permissao negada
         float custo = num_pedidos * 10 * valorBase;
         moedas -= custo;
         printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);
@@ -88,7 +88,7 @@ int main(){
         printf("| Agora você será redirecionado para a loja de ingredientes.           |\n");
         printf("------------------------------------------------------------------------\n");
         Sleep(3 * 1000);
-    interface_loja(&estoque, &moedas);
+        interface_loja(&estoque, &moedas);
     }
     if(dia == 10 && moedas > 0){
         printf("\nParabéns! Você conseguiu completar todos os dias de trabalho!\n");
