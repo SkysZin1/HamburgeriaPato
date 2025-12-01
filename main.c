@@ -78,6 +78,7 @@ int main(){
         printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);
         printf("| Custo de operação: R$ %-44.2f |\n", custo);
         if (moedas <= 0){
+            ordena_ingredientes_por_uso(&estoque);
             printf("\nVocê ficou sem moedas! Fim de jogo.\n");
             imprimeRelatorio();
             break;

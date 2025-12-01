@@ -15,6 +15,7 @@ typedef struct{ // Criação da struct tp_ingrediente
     char nome[25]; 
     float valor;
     int quantidade;
+    int usados;
 }tp_ingrediente;
 
 typedef struct {  // Criação da struct tp_hamburger
@@ -77,18 +78,14 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
 }
 
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // Compara o hamburger montado com o pedido esperado
-    tp_pilha esperado = cardapio[id].ingrediente, invertido;
-    inicializapilha(&invertido);
+    tp_pilha esperado = cardapio[id].ingrediente;
     float contador = 0;
     tp_item a[30], b[30];
-    while(!pilhavazia(&esperado)){
-        pop(&esperado, a);
-        push(&invertido, a);
-    }
-    int divisor = alturaPilha(&invertido);
+    int divisor = alturaPilha(&esperado);
+
     for(int i=0; i<divisor; i++){
-        if(pilhavazia(&invertido) || pilhavazia(montado)) break;
-        pop(&invertido, a);
+        if(pilhavazia(&esperado) || pilhavazia(montado)) break;
+        pop(&esperado, a);
         pop(montado, b);
         if(strcmp(a, b)==0) contador++;
     }

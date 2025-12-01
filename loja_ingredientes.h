@@ -14,21 +14,21 @@ typedef struct {
 void inicializa_estoque_lista(tp_estoque_arvore* estoque) {
     estoque->raiz = criarAVL();
 
-    // Array com os 13 ingredientes padrão
+    // Vetor com os 13 ingredientes padrão
     tp_ingrediente itens[13] = {
-        {"Pao", valorBase*3, 5},
-        {"Queijo", valorBase*5, 5},
-        {"Alface", valorBase*3, 5},
-        {"Tomate", valorBase*3, 5},
-        {"Carne", valorBase*8, 5},
-        {"Bacon", valorBase*6, 5},
-        {"Carne de Falafel", valorBase*10, 5},
-        {"Frango Empanado", valorBase*7, 5},
-        {"Maionese Temperada", valorBase*3, 5},
-        {"BBQ", valorBase*4, 5},
-        {"Cebola Crispy", valorBase*5, 5},
-        {"Ovo", valorBase*5, 5},
-        {"Cheddar", valorBase*4, 5}
+        {"Pao", valorBase*3, 5, 0},
+        {"Queijo", valorBase*5, 5, 0},
+        {"Alface", valorBase*3, 5, 0},
+        {"Tomate", valorBase*3, 5, 0},
+        {"Carne", valorBase*8, 5, 0},
+        {"Bacon", valorBase*6, 5, 0},
+        {"Carne de Falafel", valorBase*10, 5, 0},
+        {"Frango Empanado", valorBase*7, 5, 0},
+        {"Maionese Temperada", valorBase*3, 5, 0},
+        {"BBQ", valorBase*4, 5, 0},
+        {"Cebola Crispy", valorBase*5, 5, 0},
+        {"Ovo", valorBase*5, 5, 0},
+        {"Cheddar", valorBase*4, 5, 0}
     };
 
     // Insere todos os ingredientes na árvore
@@ -188,11 +188,37 @@ int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_arvore *
         }
         push(montado, no_encontrado->info.nome);
         no_encontrado->info.quantidade--;
+        no_encontrado->info.usados++;
         system("cls");
         printf("\nIngrediente %s adicionado ao pedido!\n", no_encontrado->info.nome);
         return 1;
     }
     return 0;
+}
+
+    void copiar_ingredientes(struct NO* no, tp_ingrediente ingredientes[], int i) {
+        if (no == NULL) return;
+        copiar_ingredientes(no->esq, ingredientes, i);
+        ingredientes[i] = no->info;
+        i++;
+        copiar_ingredientes(no->dir, ingredientes, i);
+    }
+
+void ordena_ingredientes_por_uso(tp_estoque_arvore *estoque) {
+    int n = 13;
+    tp_ingrediente ingredientes[13];
+    // Copia os ingredientes da árvore para um vetor
+    copiar_ingredientes(*estoque->raiz, ingredientes, 0);
+    for(int i = 0; i < n-1; i++) {
+        for(int j = 0; j < n-i-1; j++) {
+            if(ingredientes[j].usados < ingredientes[j+1].usados) {
+                tp_ingrediente temp = ingredientes[j];
+                ingredientes[j] = ingredientes[j+1];
+                ingredientes[j+1] = temp;
+            }
+        }
+    }
+    gravaRelatorioUsosIngredientes(ingredientes); // Grava o relatório de usos dos ingredientes
 }
 
 #endif
