@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include "cardapio.h"
 
 typedef struct NO* ArvAVL;
 
 struct NO{
    struct NO *esq;
-   int info;
-   int alt; //altura da sub-�rvore (facilita o c�lculo do fator de balanceamento!)
+   tp_ingrediente info;
+   int alt; //altura da sub-árvore (facilita o cálculo do fator de balanceamento!)
    struct NO *dir;
 };
 
@@ -16,10 +17,10 @@ ArvAVL* criarAVL();
 void preOrd(ArvAVL* raiz);
 void emOrd(ArvAVL* raiz);
 void posOrd(ArvAVL* raiz);
-int inserir(ArvAVL* raiz, int valor);
-int remover(ArvAVL* raiz, int valor); // Respons�vel pela busca do n� a ser removido
-struct NO* buscarMenor(struct NO* atual); // Busca o n� mais a esquerda de uma �rvore
-int consultarValorAVL(ArvAVL* raiz, int valor);
+int inserir(ArvAVL* raiz, tp_ingrediente valor);
+int remover(ArvAVL* raiz, const char* nome); // Remove por nome
+struct NO* buscarMenor(struct NO* atual); // Busca o nó mais a esquerda de uma árvore
+struct NO* consultarValorAVL(ArvAVL* raiz, const char* nome); // Busca por nome
 int maior(int x, int y);
 int alt_NO(struct NO* no);
 int fb_NO(struct NO* no);
@@ -108,7 +109,7 @@ int totalNOsABB(ArvAVL* raiz){
 
 
 
-int inserir(ArvAVL* raiz, int valor){	
+int inserir(ArvAVL* raiz, tp_ingrediente valor){	
 	int res;
 	if(*raiz==NULL){
 		struct NO* novo;
@@ -122,10 +123,12 @@ int inserir(ArvAVL* raiz, int valor){
 		return 1;	
 	} else {
 		struct NO* atual = *raiz;
-		if(valor < atual->info){
+		int cmp = strcmp(valor.nome, atual->info.nome);
+		
+		if(cmp < 0){
 			if((res=inserir(&(atual->esq), valor))==1){
 				if(fb_NO(atual) >= 2){
-					if(valor < (*raiz)->esq->info){
+					if(strcmp(valor.nome, (*raiz)->esq->info.nome) < 0){
 						RotacaoLL(raiz);
 					}else{
 						RotacaoLR(raiz);
@@ -133,10 +136,10 @@ int inserir(ArvAVL* raiz, int valor){
 				}
 			}
 		}else{
-			if(valor > atual->info){
+			if(cmp > 0){
 				if((res=inserir(&(atual->dir), valor))==1){
 					if(fb_NO(atual) >= 2){
-						if(valor > (*raiz)->dir->info){
+						if(strcmp(valor.nome, (*raiz)->dir->info.nome) > 0){
 							RotacaoRR(raiz);
 						}else{
 							RotacaoRL(raiz);
@@ -166,22 +169,23 @@ void liberaABB(ArvAVL* raiz){
    free(raiz);
 }
 
-int consultarValorAVL(ArvAVL* raiz, int valor){
-	if(raiz == NULL) return 0;
-	if(*raiz == NULL) return 0;
+struct NO* consultarValorAVL(ArvAVL* raiz, const char* nome){
+	if(raiz == NULL) return NULL;
+	if(*raiz == NULL) return NULL;
 	struct NO* atual = *raiz;
 	while(atual != NULL){
-		if(atual->info == valor){
-			return 1;
+		int cmp = strcmp(nome, atual->info.nome);
+		if(cmp == 0){
+			return atual;
 		}else{
-			if(atual->info > valor){
+			if(cmp < 0){
 				atual = atual->esq;
 			}else{
 				atual = atual->dir;
 			}
 		}
 	}
-	return 0;
+	return NULL;
 }
 
 int alt_NO(struct NO* no){
@@ -228,15 +232,16 @@ void RotacaoRL(ArvAVL* raiz){
 	RotacaoLL(&(*raiz)->dir);
 	RotacaoRR(raiz);
 }
-
-int remover(ArvAVL* raiz, int valor){	
+int remover(ArvAVL* raiz, const char* nome){	
 	int res;
-	if(*raiz==NULL){ // Valor n�o encontrado!
-		printf("Valor %d nao encontrado na �rvore!", valor);
+	if(*raiz==NULL){ // Valor não encontrado!
+		printf("Ingrediente %s nao encontrado na árvore!", nome);
 		return 0;	
 	} 
-	if(valor < (*raiz)->info){
-		if((res=remover(&(*raiz)->esq, valor))==1){
+	int cmp = strcmp(nome, (*raiz)->info.nome);
+	
+	if(cmp < 0){
+		if((res=remover(&(*raiz)->esq, nome))==1){
 			if(fb_NO(*raiz) >= 2){
 				if(alt_NO((*raiz)->dir->esq) <= alt_NO((*raiz)->dir->dir)){
 					RotacaoRR(raiz);
@@ -245,8 +250,8 @@ int remover(ArvAVL* raiz, int valor){
 				}
 			}
 		}				
-	}else if(valor > (*raiz)->info){
-		if((res=remover(&(*raiz)->dir, valor))==1){
+	}else if(cmp > 0){
+		if((res=remover(&(*raiz)->dir, nome))==1){
 			if(fb_NO(*raiz) >= 2){
 				if(alt_NO((*raiz)->esq->dir) <= alt_NO((*raiz)->esq->esq)){
 					RotacaoLL(raiz);
@@ -255,17 +260,17 @@ int remover(ArvAVL* raiz, int valor){
 				}
 			}
 		}							
-	}else{ // raiz->info == valor...
+	}else{ // raiz->info.nome == nome...
 		if(((*raiz)->esq == NULL) || ((*raiz)->dir == NULL)){ // O Pai tem 1 ou nenhum filho
 			struct NO* noVelho = (*raiz);
 			if((*raiz)->esq != NULL) *raiz = (*raiz)->esq;
 			else *raiz = (*raiz)->dir;
 			free(noVelho);
 			return 1;
-		}else{ // o n� tem 2 filhos: precisamos substituir pelo n� mais a esquerda da sub�rvore da direita
+		}else{ // o nó tem 2 filhos: precisamos substituir pelo nó mais a esquerda da subárvore da direita
 			struct NO* temp = buscarMenor((*raiz)->dir);
 			(*raiz)->info = temp->info;
-			remover(&(*raiz)->dir, (*raiz)->info);
+			remover(&(*raiz)->dir, (*raiz)->info.nome);
 			if(fb_NO(*raiz) >= 2){
 				if(alt_NO((*raiz)->esq->dir) <= alt_NO((*raiz)->esq->esq)){
 					RotacaoLL(raiz);

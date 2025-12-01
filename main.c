@@ -18,7 +18,7 @@ int main(){
     apagaRelatorio();
     tp_hamburger cardapio[10];
     inicializacardapio(cardapio);
-    tp_estoque_lista estoque;
+    tp_estoque_arvore estoque;
     inicializa_estoque_lista(&estoque);
     tp_fila pedidos;
     inicializaFila(&pedidos);
@@ -72,7 +72,7 @@ int main(){
             Sleep(3 * 1000);
             apagarPilha(&montado);
         }
-        gravaRelatorioDia(dia, num_pedidos, ganho); // erro ao abrir: permissao negada
+        gravaRelatorioDia(dia, num_pedidos, ganho); // erro ao abrir no senai: permissao negada
         float custo = num_pedidos * 10 * valorBase;
         moedas -= custo;
         printf("+------------------------------ FIM DO DIA %d ------------------------------+\n", dia);

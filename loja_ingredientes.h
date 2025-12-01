@@ -1,24 +1,20 @@
 #ifndef LOJA_INGREDIENTES_H
 #define LOJA_INGREDIENTES_H
 #include "cardapio.h"
+#include "arvoreavl.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct No {
-    tp_ingrediente ingrediente;
-    struct No* proximo;
-} No;
-
 typedef struct {
-    No* inicio;
-} tp_estoque_lista;
+    ArvAVL* raiz;
+} tp_estoque_arvore;
 
-// Inicializa o estoque em lista encadeada com valores padrão
-void inicializa_estoque_lista(tp_estoque_lista* estoque) {
-    estoque->inicio = NULL;
+// Inicializa o estoque em árvore AVL com os 13 ingredientes padrão
+void inicializa_estoque_lista(tp_estoque_arvore* estoque) {
+    estoque->raiz = criarAVL();
 
-    // Set de todos os ingredientes com seus valores e quantidades iniciais
+    // Array com os 13 ingredientes padrão
     tp_ingrediente itens[13] = {
         {"Pao", valorBase*3, 5},
         {"Queijo", valorBase*5, 5},
@@ -35,35 +31,28 @@ void inicializa_estoque_lista(tp_estoque_lista* estoque) {
         {"Cheddar", valorBase*4, 5}
     };
 
-    // Insere todos os itens na lista (inserção no início é suficiente, buscamos por nome quando necessário)
+    // Insere todos os ingredientes na árvore
     for (int i = 0; i < 13; ++i) {
-        No* novo_no = (No*)malloc(sizeof(No));
-        if (novo_no == NULL) {
-            printf("Erro ao alocar memória para o novo nó!\n");
-            exit(1);
-        }
-        novo_no->ingrediente = itens[i];
-        novo_no->proximo = estoque->inicio;
-        estoque->inicio = novo_no;
+        inserir(estoque->raiz, itens[i]);
     }
 }
 
 // Função auxiliar: encontra nó do ingrediente por nome
-No* encontra_no_por_nome(tp_estoque_lista* estoque, const char* nome) {
-    No* atual = estoque->inicio;
-    while (atual != NULL) {
-        if (strcmp(atual->ingrediente.nome, nome) == 0) {
-            return atual;
-        }
-        atual = atual->proximo;
-    }
-    return NULL;
+struct NO* encontra_no_por_nome(tp_estoque_arvore* estoque, const char* nome) {
+    return consultarValorAVL(estoque->raiz, nome);
 }
 
 
 
-// Imprime estoque
-void imprime_estoque_lista(tp_estoque_lista* estoque) {
+// Imprime estoque (em ordem)
+void imprime_estoque_em_ordem(struct NO* no) {
+    if (no == NULL) return;
+    imprime_estoque_em_ordem(no->esq);
+    printf("| %-30s | %8d |\n", no->info.nome, no->info.quantidade);
+    imprime_estoque_em_ordem(no->dir);
+}
+
+void imprime_estoque_lista(tp_estoque_arvore* estoque) {
     int opcao = 1;
     while (opcao != 0) {
         system("cls");
@@ -71,11 +60,8 @@ void imprime_estoque_lista(tp_estoque_lista* estoque) {
         printf("| %-30s | %8s |\n", "INGREDIENTE", "QUANT.");
         printf("---------------------------------------------------------------\n");
 
-        No* atual = estoque->inicio;
-        while (atual != NULL) {
-            printf("| %-30s | %8d |\n", atual->ingrediente.nome, atual->ingrediente.quantidade);
-            atual = atual->proximo;
-        }
+        imprime_estoque_em_ordem(*estoque->raiz);
+        
         printf("---------------------------------------------------------------\n");
         printf("Digite 0 para sair\n");
         scanf("%d", &opcao);
@@ -83,19 +69,8 @@ void imprime_estoque_lista(tp_estoque_lista* estoque) {
     system("cls");
 }
 
-// Libera memória
- void libera_estoque_lista(tp_estoque_lista* estoque) {
-    No* atual = estoque->inicio;
-    while (atual != NULL) {
-        No* proximo_no = atual->proximo;
-        free(atual);
-        atual = proximo_no;
-    }
-    estoque->inicio = NULL;
-}
-
 // Interface da loja de ingredientes
-void interface_loja(tp_estoque_lista* estoque, float* moedas) {
+void interface_loja(tp_estoque_arvore* estoque, float* moedas) {
     int opcao = -1;
     while (opcao != 0) {
         system("cls");
@@ -131,15 +106,15 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
                 
                 // Lista de ingredientes
                 for (int i = 0; i < 13; i++) {
-                    No* no_encontrado = encontra_no_por_nome(estoque, nomes[i]);
+                    struct NO* no_encontrado = encontra_no_por_nome(estoque, nomes[i]);
                     if (no_encontrado) {
                         printf("%-3d %-20s", i, nomes[i]);
                         if (opcao == 1) {
-                            printf("R$%-10.2f", no_encontrado->ingrediente.valor);
+                            printf("R$%-10.2f", no_encontrado->info.valor);
                         } else {
-                            printf("R$%-10.2f", no_encontrado->ingrediente.valor * 0.7);
+                            printf("R$%-10.2f", no_encontrado->info.valor * 0.7);
                         }
-                        printf("%-3d\n", no_encontrado->ingrediente.quantidade);
+                        printf("%-3d\n", no_encontrado->info.quantidade);
                     }
                 }
                 
@@ -163,9 +138,9 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
                     }
                 }
             
-            No* no_encontrado = encontra_no_por_nome(estoque, nomes[id_ingrediente]);
+            struct NO* no_encontrado = encontra_no_por_nome(estoque, nomes[id_ingrediente]);
             if (no_encontrado) {
-                float valor_total = no_encontrado->ingrediente.valor * quantidade;
+                float valor_total = no_encontrado->info.valor * quantidade;
                 
                 if (opcao == 1) { // Compra
                     if (valor_total > *moedas) {
@@ -174,18 +149,18 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
                         Sleep(2000);
                         continue;
                     }
-                    no_encontrado->ingrediente.quantidade += quantidade;
+                    no_encontrado->info.quantidade += quantidade;
                     *moedas -= valor_total;
                     printf("\nComprado %d unidades de %s por %.2f moedas\n", 
                         quantidade, nomes[id_ingrediente], valor_total);
                 } else { // Venda
-                    if (quantidade > no_encontrado->ingrediente.quantidade) {
+                    if (quantidade > no_encontrado->info.quantidade) {
                         printf("\nEstoque insuficiente! Disponível: %d\n", 
-                            no_encontrado->ingrediente.quantidade);
+                            no_encontrado->info.quantidade);
                         Sleep(2000);
                         continue;
                     }
-                    no_encontrado->ingrediente.quantidade -= quantidade;
+                    no_encontrado->info.quantidade -= quantidade;
                     *moedas += valor_total * 0.7; // Venda por 70% do valor
                     printf("\nVendido %d unidades de %s por %.2f moedas\n", 
                         quantidade, nomes[id_ingrediente], valor_total * 0.7);
@@ -198,7 +173,7 @@ void interface_loja(tp_estoque_lista* estoque, float* moedas) {
 }
 
 // Adiciona ingrediente ao pedido
-int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_lista *estoque) {
+int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_arvore *estoque) {
     const char* nomes[13] = {
         "Pao","Queijo","Alface","Tomate","Carne","Bacon",
         "Carne de Falafel","Frango Empanado","Maionese Temperada","BBQ",
@@ -206,15 +181,15 @@ int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_lista *e
     };
     if (opcao >= 0 && opcao <= 12) {
         const char* nome = nomes[opcao];
-        No* no_encontrado = encontra_no_por_nome(estoque, nome);
-        if (no_encontrado->ingrediente.quantidade <= 0) {
+        struct NO* no_encontrado = encontra_no_por_nome(estoque, nome);
+        if (no_encontrado->info.quantidade <= 0) {
             printf("Sem estoque de %s!\n", nome);
             return 0;
         }
-        push(montado, no_encontrado->ingrediente.nome);
-        no_encontrado->ingrediente.quantidade--;
+        push(montado, no_encontrado->info.nome);
+        no_encontrado->info.quantidade--;
         system("cls");
-        printf("\nIngrediente %s adicionado ao pedido!\n", no_encontrado->ingrediente.nome);
+        printf("\nIngrediente %s adicionado ao pedido!\n", no_encontrado->info.nome);
         return 1;
     }
     return 0;
