@@ -1,6 +1,0 @@
-
-======= RELATÓRIO DO DIA 1 =======
-Total de hambúrgueres vendidos: 1
-Total de moedas obtidas: R$ 0.00
-=====================================
-
