@@ -66,7 +66,7 @@ int main(){
             recebido_total += ganho;
             moedas += ganho;
             printf("+------------------------------ ENTREGA ------------------------------+\n");
-            printf("| Você acertou %.2f%% do pedido! Ganhou R$ %8.2f nesta entrega.         |\n", valor_recebido*100, ganho);
+            printf("| Você acertou %.2f%% do pedido! Ganhou R$ %.2f nesta entrega.           |\n", valor_recebido*100, ganho);
             printf("| Total de moedas: R$ %-44.2f |\n", moedas);
             printf("-----------------------------------------------------------------------\n");
             Sleep(3 * 1000);

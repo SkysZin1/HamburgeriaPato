@@ -2,6 +2,7 @@
 #define LOJA_INGREDIENTES_H
 #include "cardapio.h"
 #include "arvoreavl.h"
+#include "aloca.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -196,19 +197,20 @@ int adicionarIngrediente_lista(int opcao, tp_pilha *montado, tp_estoque_arvore *
     return 0;
 }
 
-    void copiar_ingredientes(struct NO* no, tp_ingrediente ingredientes[], int i) {
-        if (no == NULL) return;
-        copiar_ingredientes(no->esq, ingredientes, i);
-        ingredientes[i] = no->info;
-        i++;
-        copiar_ingredientes(no->dir, ingredientes, i);
-    }
+void copiar_ingredientes(struct NO* no, tp_ingrediente ingredientes[], int *i) {
+    if (no == NULL) return;
+    copiar_ingredientes(no->esq, ingredientes, i);
+    ingredientes[*i] = no->info;
+    (*i)++;
+    copiar_ingredientes(no->dir, ingredientes, i);
+}
 
 void ordena_ingredientes_por_uso(tp_estoque_arvore *estoque) {
     int n = 13;
     tp_ingrediente ingredientes[13];
     // Copia os ingredientes da árvore para um vetor
-    copiar_ingredientes(*estoque->raiz, ingredientes, 0);
+    int idx = 0;
+    copiar_ingredientes(*estoque->raiz, ingredientes, &idx);
     for(int i = 0; i < n-1; i++) {
         for(int j = 0; j < n-i-1; j++) {
             if(ingredientes[j].usados < ingredientes[j+1].usados) {
@@ -218,7 +220,7 @@ void ordena_ingredientes_por_uso(tp_estoque_arvore *estoque) {
             }
         }
     }
-    gravaRelatorioUsosIngredientes(ingredientes); // Grava o relatório de usos dos ingredientes
+    gravaRelatorioUsosIngredientes(ingredientes, n); // Grava o relatório de usos dos ingredientes
 }
 
 #endif

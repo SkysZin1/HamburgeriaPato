@@ -38,7 +38,12 @@ int gravaRelatorioDia(int dia, int totalHamburgueres, float totalMoedas) { // Gr
     }
 }
 
-int gravaRelatorioUsosIngredientes(tp_ingrediente ingredientes[]){
+int gravaRelatorioUsosIngredientes(tp_ingrediente ingredientes[], int n){
+    if (ingredientes == NULL || n <= 0) {
+        fprintf(stderr, "gravaRelatorioUsosIngredientes: argumentos invalidos (ingredientes=%p, n=%d)\n", (void*)ingredientes, n);
+        return 0;
+    }
+
     FILE *arq = fopen("../alocacao.txt", "a");
 
     if (arq == NULL) {
@@ -46,19 +51,17 @@ int gravaRelatorioUsosIngredientes(tp_ingrediente ingredientes[]){
         return 0;
     }
 
-    else {
-        fprintf(arq, "\n======= USO DE INGREDIENTES =======\n");
-        fprintf(arq, "| %-25s | %-10s |\n", "INGREDIENTE", "USOS");
-        fprintf(arq, "------------------------------------\n");
-        for(int i = 0; i < 13; i++){
-            fprintf(arq, "| %-25s | %-10d |\n", ingredientes[i].nome, ingredientes[i].usados);
-        }
-        fprintf(arq, "=====================================\n\n");
-
-        fflush(arq);
-        fclose(arq);
-        return 1;
+    fprintf(arq, "\n======= USO DE INGREDIENTES =======\n");
+    fprintf(arq, "| %-25s | %-10s |\n", "INGREDIENTE", "USOS");
+    fprintf(arq, "------------------------------------\n");
+    for(int i = 0; i < n; i++){
+        fprintf(arq, "| %-25s | %-10d |\n", ingredientes[i].nome, ingredientes[i].usados);
     }
+    fprintf(arq, "=====================================\n\n");
+
+    fflush(arq);
+    fclose(arq);
+    return 1;
 }
 
 int imprimeRelatorio() { // Imprime o relatorio final na tela

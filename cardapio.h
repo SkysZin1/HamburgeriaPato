@@ -79,17 +79,17 @@ void abrirCardapio(tp_hamburger *cardapio){  // Imprime o cardapio padrao
 
 float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){ // Compara o hamburger montado com o pedido esperado
     tp_pilha esperado = cardapio[id].ingrediente;
-    float contador = 0;
+    float contador = 0.0;  // erro nessa função e eu não sei pq
     tp_item a[30], b[30];
     int divisor = alturaPilha(&esperado);
-
     for(int i=0; i<divisor; i++){
         if(pilhavazia(&esperado) || pilhavazia(montado)) break;
         pop(&esperado, a);
         pop(montado, b);
         if(strcmp(a, b)==0) contador++;
     }
-    return contador/divisor;
+    float valor = contador/divisor;
+    return valor;
 }
 
 int gerar_pedidos(tp_hamburger *cardapio, int dia, tp_fila *pedidos){  // Gera pedidos de forma aleatoria com base no dia(fase) do jogo
