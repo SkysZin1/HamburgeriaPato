@@ -79,4 +79,13 @@ int apagarPilha(tp_pilha *p){
 	return 1;
 }
 
+void inverter_pilha(tp_pilha *orig, tp_pilha *inv){
+    tp_item temp[30];
+
+    while (!pilhavazia(orig)) {
+        pop(orig, temp);
+        push(inv, temp);
+    }
+}
+
 #endif
