@@ -95,8 +95,8 @@ float compara_hamburger(tp_pilha *montado, tp_hamburger *cardapio, int id){
         if (pilhavazia(&esperado_invertido) || pilhavazia(&mon_invertido)) break;
         pop(&esperado_invertido, a);
         pop(&mon_invertido, b);
-        printf("Esperado: \"%s\" Montado: \"%s\"\n", a, b);
-        Sleep(2000);
+        /* printf("Esperado: \"%s\" Montado: \"%s\"\n", a, b);
+        Sleep(2000); */
         if (strcmp(a, b) == 0) contador++;
     }
 
