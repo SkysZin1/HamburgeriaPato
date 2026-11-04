@@ -1,1 +1,17 @@
+# Relatórios gerados durante a partida
 alocacao.txt
+
+# Executáveis e arquivos de compilação
+*.exe
+*.o
+*.obj
+*.pdb
+*.ilk
+output/
+build/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*~
+
