@@ -87,12 +87,11 @@ Os executáveis e relatórios são gerados localmente e ignorados pelo Git.
 
 Projeto desenvolvido por:
 
-- **Daniel Carneiro** — principal desenvolvedor, com participação majoritária nos módulos e na integração do jogo.
+- Daniel Carneiro
 - Davi Brito.
 - Gustavo Neves.
 - Miguel Carmo.
 
-A contribuição majoritária de Daniel não exclui a participação dos demais integrantes. Trata-se de um projeto acadêmico voltado à aplicação de lógica de programação e estruturas de dados.
 
 ## Estado do projeto
 
