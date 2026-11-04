@@ -2,8 +2,6 @@
 
 Jogo de terminal em **C**, desenvolvido em equipe para a disciplina de **Algoritmos e Estruturas de Dados (AED)**.
 
-> **English overview:** A university team project: a terminal-based burger restaurant game written in C. It applies stacks, a circular queue, an AVL tree, sorting, and text-file I/O. Daniel Carneiro was the primary developer, contributing across all modules.
-
 ## O jogo
 
 O jogador monta hambúrgueres a partir de pedidos exibidos por tempo limitado. É preciso memorizar os pedidos, respeitar a sequência dos ingredientes e administrar um estoque limitado e o saldo do restaurante.
